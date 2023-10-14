@@ -1,9 +1,9 @@
 mod advent;
 use std::collections::HashMap;
 
-use advent::day1::Day1Puzzle;
-use advent::day2::Day2Puzzle;
-use advent::AdventDay;
+use advent::day1::NewDay1Puzzle;
+use advent::day2::NewDay2Puzzle;
+use advent::Parse;
 
 pub struct CLIParams {
     pub day_to_run: String,
@@ -31,18 +31,18 @@ impl CLIParams {
     }
 }
 
-fn collect_puzzles() -> HashMap<&'static str, Box<dyn AdventDay>> {
-    let mut puzzle_days: HashMap<&'static str, Box<dyn AdventDay>> = HashMap::new();
+fn collect_puzzles() -> HashMap<&'static str, Box<dyn Parse>> {
+    let mut puzzle_days: HashMap<&'static str, Box<dyn Parse>> = HashMap::new();
 
-    puzzle_days.insert("day1", Box::new(Day1Puzzle::new()));
-    puzzle_days.insert("day2", Box::new(Day2Puzzle::new()));
+    puzzle_days.insert("day1", Box::new(NewDay1Puzzle {}));
+    puzzle_days.insert("day2", Box::new(NewDay2Puzzle {}));
     puzzle_days
 }
 
 pub fn run_advent_day(cli_params: &CLIParams) -> () {
     let mut puzzle_days = collect_puzzles();
     let mut puzzle_to_run = puzzle_days.remove(&*cli_params.day_to_run).unwrap();
-    puzzle_to_run.parse_input(&*cli_params.input_path);
-    println!("Part 1: {}", puzzle_to_run.solve_first_puzzle());
-    println!("Part 2: {}", puzzle_to_run.solve_second_puzzle());
+    let advent_day = puzzle_to_run.parse_input(&*cli_params.input_path);
+    println!("Part 1: {}", advent_day.solve_first_puzzle());
+    println!("Part 2: {}", advent_day.solve_second_puzzle());
 }

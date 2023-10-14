@@ -1,21 +1,15 @@
 use std::fs;
 
-use super::AdventDay;
+use super::{AdventDay, Parse};
+
+pub struct NewDay1Puzzle {}
 
 pub struct Day1Puzzle {
     parsed_input: Vec<u32>,
 }
 
-impl Day1Puzzle {
-    pub fn new() -> Day1Puzzle {
-        Day1Puzzle {
-            parsed_input: vec![],
-        }
-    }
-}
-
-impl AdventDay for Day1Puzzle {
-    fn parse_input(&mut self, input_path: &str) {
+impl Parse for NewDay1Puzzle {
+    fn parse_input(&mut self, input_path: &str) -> Box<dyn AdventDay> {
         let puzzle_input = fs::read_to_string(input_path).unwrap();
 
         let individual_elf_calories: Vec<u32> = puzzle_input
@@ -29,9 +23,13 @@ impl AdventDay for Day1Puzzle {
             })
             .collect();
 
-        self.parsed_input = individual_elf_calories;
+        Box::new(Day1Puzzle {
+            parsed_input: individual_elf_calories,
+        })
     }
+}
 
+impl AdventDay for Day1Puzzle {
     fn solve_first_puzzle(&self) -> String {
         self.parsed_input.iter().max().unwrap().to_string()
     }
