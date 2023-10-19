@@ -12,7 +12,7 @@ impl Parse for NewDay2Puzzle {
     fn parse_input(&mut self, input_path: &str) -> Box<dyn AdventDay> {
         let puzzle_input = fs::read_to_string(input_path).unwrap();
 
-        let parsed_input = parse_rock_paper_scissors_games(puzzle_input);
+        let parsed_input = parse_rock_paper_scissors_games(&puzzle_input);
 
         Box::new(Day2Puzzle {
             parsed_input: parsed_input,
@@ -20,7 +20,7 @@ impl Parse for NewDay2Puzzle {
     }
 }
 
-fn parse_rock_paper_scissors_games(unparsed_games: String) -> Vec<(String, String)> {
+fn parse_rock_paper_scissors_games(unparsed_games: &str) -> Vec<(String, String)> {
     unparsed_games
         .split("\n")
         .map(|rock_paper_scissors_game| {
@@ -432,7 +432,7 @@ mod tests {
 A Y
 B X
 C Z";
-        let actual = parse_rock_paper_scissors_games(String::from(input));
+        let actual = parse_rock_paper_scissors_games(&input);
 
         assert_eq!(actual, expected);
     }
