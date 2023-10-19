@@ -1,5 +1,6 @@
 pub mod day1;
 pub mod day2;
+pub mod day3;
 
 pub trait Parse {
     fn parse_input(&mut self, input_path: &str) -> Box<dyn AdventDay>;
