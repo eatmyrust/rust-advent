@@ -9,7 +9,7 @@ pub struct Day1Puzzle {
 }
 
 impl Parse for NewDay1Puzzle {
-    fn parse_input(&mut self, input_path: &str) -> Box<dyn AdventDay> {
+    fn parse_input(&self, input_path: &str) -> Box<dyn AdventDay> {
         let puzzle_input = fs::read_to_string(input_path).unwrap();
 
         let individual_elf_calories: Vec<u32> = puzzle_input
