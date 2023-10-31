@@ -1,4 +1,4 @@
-use std::{collections::HashSet, fs};
+use std::{collections::HashSet, error::Error, fs};
 
 use super::{AdventDay, Parse};
 
@@ -9,22 +9,32 @@ pub struct Day3Puzzle {
 }
 
 impl Parse for NewDay3Puzzle {
-    fn parse_input(&self, input_path: &str) -> Box<dyn AdventDay> {
+    fn parse_input(&self, input_path: &str) -> Result<Box<dyn AdventDay>, Box<dyn Error>> {
         let puzzle_input = fs::read_to_string(input_path).unwrap();
 
-        let rucksack_compartments = parse_rucksacks(&puzzle_input);
+        let rucksack_compartments = parse_rucksacks(&puzzle_input)?;
 
-        Box::new(Day3Puzzle {
+        Ok(Box::new(Day3Puzzle {
             parsed_input: rucksack_compartments,
-        })
+        }))
     }
 }
 
-fn parse_rucksacks(input: &str) -> Vec<String> {
+fn check_rucksack_only_contains_alphanumeric(rucksack: &str) -> Result<(), Box<dyn Error>> {
+    if rucksack.chars().all(|item| item.is_ascii_alphabetic()) {
+        return Ok(());
+    }
+    Err("Rucksack contained invalid items: allowed values are A-Z and a-z".into())
+}
+
+fn parse_rucksacks(input: &str) -> Result<Vec<String>, Box<dyn Error>> {
     input
         .split("\n")
-        .map(|rucksack| String::from(rucksack))
-        .collect::<Vec<String>>()
+        .map(|rucksack| {
+            check_rucksack_only_contains_alphanumeric(rucksack)?;
+            Ok(String::from(rucksack))
+        })
+        .collect::<Result<Vec<String>, _>>()
 }
 
 impl AdventDay for Day3Puzzle {
@@ -219,7 +229,21 @@ mod tests {
     }
 
     #[test]
-    fn parse_input() {
+    fn day_3_parse_input_invalid_characters() {
+        let input = "\
+v#JrwpWtwJgWrhcsFMMfFFhFp*
+jqH}RNqRjqzjGDLGLrsFMfFZSr$LrFZsSL
+PmmdzqPrVvPwwTWBwg
+wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+ttgJtRGJQctTZtZT
+CrZsJsPPZsGzwwsLwLmpwMDw";
+        let actual = check_rucksack_only_contains_alphanumeric(input);
+
+        assert!(actual.is_err())
+    }
+
+    #[test]
+    fn parse_input() -> Result<(), Box<dyn Error>> {
         let expected = vec![
             String::from("vJrwpWtwJgWrhcsFMMfFFhFp"),
             String::from("jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"),
@@ -236,8 +260,9 @@ PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw";
-        let actual = parse_rucksacks(input);
+        let actual = parse_rucksacks(input)?;
 
-        assert_eq!(actual, expected)
+        assert_eq!(actual, expected);
+        Ok(())
     }
 }
