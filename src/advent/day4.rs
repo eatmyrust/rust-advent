@@ -1,4 +1,4 @@
-use std::fs;
+use std::{error::Error, fs};
 
 use super::{AdventDay, Parse};
 
@@ -9,31 +9,47 @@ pub struct Day4Puzzle {
 }
 
 impl Parse for NewDay4Puzzle {
-    fn parse_input(&self, input_path: &str) -> Box<dyn AdventDay> {
+    fn parse_input(&self, input_path: &str) -> Result<Box<dyn AdventDay>, Box<dyn Error>> {
         let puzzle_input = fs::read_to_string(input_path).unwrap();
 
-        let parsed_input = parse_cleaning_assingments(&puzzle_input);
-        Box::new(Day4Puzzle { parsed_input })
+        let parsed_input = parse_cleaning_assignments(&puzzle_input)?;
+        Ok(Box::new(Day4Puzzle { parsed_input }))
     }
 }
 
-fn parse_cleaning_range(cleaning_range_string: &str) -> CleaningAssignment {
+fn parse_cleaning_range(cleaning_range_string: &str) -> Result<CleaningAssignment, Box<dyn Error>> {
     let mut cleaning_zone_start_and_end = cleaning_range_string.split("-");
-    let start_zone: u32 = cleaning_zone_start_and_end.next().unwrap().parse().unwrap();
-    let end_zone: u32 = cleaning_zone_start_and_end.next().unwrap().parse().unwrap();
-    CleaningAssignment::new(start_zone, end_zone)
+    let start_zone: u32 = cleaning_zone_start_and_end
+        .next()
+        .ok_or("Cleaning zone did not contain start or end zone.")?
+        .parse()?;
+    let end_zone: u32 = cleaning_zone_start_and_end
+        .next()
+        .ok_or("Cleaning zone did not contain start or end zone.")?
+        .parse()?;
+    Ok(CleaningAssignment::new(start_zone, end_zone))
 }
 
-fn parse_cleaning_assingments(input: &str) -> Vec<(CleaningAssignment, CleaningAssignment)> {
+fn parse_cleaning_assignments(
+    input: &str,
+) -> Result<Vec<(CleaningAssignment, CleaningAssignment)>, Box<dyn Error>> {
     input
         .split("\n")
         .map(|x| {
             let mut cleaning_range_iter = x.split(",");
-            let first_cleaning_range = parse_cleaning_range(cleaning_range_iter.next().unwrap());
-            let second_cleaning_range = parse_cleaning_range(cleaning_range_iter.next().unwrap());
-            (first_cleaning_range, second_cleaning_range)
+            let first_cleaning_range = parse_cleaning_range(
+                cleaning_range_iter
+                    .next()
+                    .ok_or("Cleaning assignments not separated by comma")?,
+            )?;
+            let second_cleaning_range = parse_cleaning_range(
+                cleaning_range_iter
+                    .next()
+                    .ok_or("Cleaning assignments not separated by comma")?,
+            )?;
+            Ok((first_cleaning_range, second_cleaning_range))
         })
-        .collect::<Vec<(CleaningAssignment, CleaningAssignment)>>()
+        .collect::<Result<Vec<(CleaningAssignment, CleaningAssignment)>, _>>()
 }
 
 impl AdventDay for Day4Puzzle {
@@ -169,43 +185,105 @@ mod tests {
     }
 
     #[test]
-    fn day_4_parse_cleaning_range_start_2_end_4() {
+    fn day_4_parse_cleaning_range_start_2_end_4() -> Result<(), Box<dyn Error>> {
         let expected = CleaningAssignment {
             start_zone: 2,
             end_zone: 4,
         };
 
-        let actual = parse_cleaning_range("2-4");
+        let actual = parse_cleaning_range("2-4")?;
 
         assert_eq!(expected, actual);
+        Ok(())
     }
 
     #[test]
-    fn day_4_parse_cleaning_range_start_6_end_8() {
+    fn day_4_parse_cleaning_range_start_6_end_8() -> Result<(), Box<dyn Error>> {
         let expected = CleaningAssignment {
             start_zone: 6,
             end_zone: 8,
         };
 
-        let actual = parse_cleaning_range("6-8");
+        let actual = parse_cleaning_range("6-8")?;
 
         assert_eq!(expected, actual);
+        Ok(())
     }
 
     #[test]
-    fn day_4_parse_cleaning_range_start_6_end_6() {
+    fn day_4_parse_cleaning_range_start_6_end_6() -> Result<(), Box<dyn Error>> {
         let expected = CleaningAssignment {
             start_zone: 6,
             end_zone: 6,
         };
 
-        let actual = parse_cleaning_range("6-6");
+        let actual = parse_cleaning_range("6-6")?;
 
         assert_eq!(expected, actual);
+        Ok(())
     }
 
     #[test]
-    fn day_4_parse_input() {
+    fn day_4_parse_cleaning_range() -> Result<(), Box<dyn Error>> {
+        let expected = CleaningAssignment::new(8, 14);
+
+        let actual = parse_cleaning_range("8-14")?;
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn day_4_parse_cleaning_range_invalid_start_and_end() {
+        let actual = parse_cleaning_range("foo-bar");
+
+        assert!(actual.is_err())
+    }
+
+    #[test]
+    fn day_4_parse_cleaning_range_empty_start() {
+        let actual = parse_cleaning_range("-13");
+
+        assert!(actual.is_err())
+    }
+
+    #[test]
+    fn day_4_parse_cleaning_range_empty_end() {
+        let actual = parse_cleaning_range("2-");
+
+        assert!(actual.is_err())
+    }
+
+    #[test]
+    fn day_4_parse_cleaning_range_empty_start_and_end() {
+        let actual = parse_cleaning_range("-");
+
+        assert!(actual.is_err())
+    }
+
+    #[test]
+    fn day_4_parse_cleaning_range_empty() {
+        let actual = parse_cleaning_range("");
+
+        assert!(actual.is_err())
+    }
+
+    #[test]
+    fn day_4_parse_cleaning_assignments_missing_comma() {
+        let input = "\
+2-46-8
+2-3,4-5
+5-7,7-9
+2-83-7
+6-6,4-6
+2-6,4-8";
+        let actual = parse_cleaning_assignments("");
+
+        assert!(actual.is_err())
+    }
+
+    #[test]
+    fn day_4_parse_input() -> Result<(), Box<dyn Error>> {
         let expected = vec![
             (CleaningAssignment::new(2, 4), CleaningAssignment::new(6, 8)),
             (CleaningAssignment::new(2, 3), CleaningAssignment::new(4, 5)),
@@ -222,8 +300,9 @@ mod tests {
 2-8,3-7
 6-6,4-6
 2-6,4-8";
-        let actual = parse_cleaning_assingments(input);
+        let actual = parse_cleaning_assignments(input)?;
 
-        assert_eq!(expected, actual)
+        assert_eq!(expected, actual);
+        Ok(())
     }
 }

@@ -1,5 +1,6 @@
 mod advent;
 use std::collections::HashMap;
+use std::error::Error;
 
 use advent::day1::NewDay1Puzzle;
 use advent::day2::NewDay2Puzzle;
@@ -43,10 +44,12 @@ fn collect_puzzles() -> HashMap<&'static str, Box<dyn Parse>> {
     puzzle_days
 }
 
-pub fn run_advent_day(cli_params: &CLIParams) -> () {
+pub fn run_advent_day(cli_params: &CLIParams) -> Result<(), Box<dyn Error>> {
     let mut puzzle_days = collect_puzzles();
     let puzzle_to_run = puzzle_days.remove(&*cli_params.day_to_run).unwrap();
-    let advent_day = puzzle_to_run.parse_input(&*cli_params.input_path);
+    let advent_day = puzzle_to_run.parse_input(&*cli_params.input_path)?;
     println!("Part 1: {}", advent_day.solve_first_puzzle());
     println!("Part 2: {}", advent_day.solve_second_puzzle());
+
+    Ok(())
 }
