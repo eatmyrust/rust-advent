@@ -46,7 +46,9 @@ fn collect_puzzles() -> HashMap<&'static str, Box<dyn Parse>> {
 
 pub fn run_advent_day(cli_params: &CLIParams) -> Result<(), Box<dyn Error>> {
     let mut puzzle_days = collect_puzzles();
-    let puzzle_to_run = puzzle_days.remove(&*cli_params.day_to_run).unwrap();
+    let puzzle_to_run = puzzle_days
+        .remove(&*cli_params.day_to_run)
+        .ok_or("Specified day to run has not been implemented yet")?;
     let advent_day = puzzle_to_run.parse_input(&*cli_params.input_path)?;
     println!("Part 1: {}", advent_day.solve_first_puzzle());
     println!("Part 2: {}", advent_day.solve_second_puzzle());
