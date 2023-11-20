@@ -6,6 +6,7 @@ use advent::day1::NewDay1Puzzle;
 use advent::day2::NewDay2Puzzle;
 use advent::day3::NewDay3Puzzle;
 use advent::day4::NewDay4Puzzle;
+use advent::day5::NewDay5Puzzle;
 use advent::Parse;
 
 pub struct CLIParams {
@@ -41,6 +42,7 @@ fn collect_puzzles() -> HashMap<&'static str, Box<dyn Parse>> {
     puzzle_days.insert("day2", Box::new(NewDay2Puzzle {}));
     puzzle_days.insert("day3", Box::new(NewDay3Puzzle {}));
     puzzle_days.insert("day4", Box::new(NewDay4Puzzle {}));
+    puzzle_days.insert("day5", Box::new(NewDay5Puzzle {}));
     puzzle_days
 }
 
