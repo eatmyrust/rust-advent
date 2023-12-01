@@ -1,6 +1,6 @@
 use std::{error::Error, fs};
 
-use super::{AdventDay, Parse};
+use super::super::{AdventDay, Parse};
 
 pub struct NewDay1Puzzle {}
 

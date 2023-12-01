@@ -1,10 +1,6 @@
 use std::error::Error;
 
-pub mod day1;
-pub mod day2;
-pub mod day3;
-pub mod day4;
-pub mod day5;
+pub mod year_2022;
 
 pub trait Parse {
     fn parse_input(&self, input_path: &str) -> Result<Box<dyn AdventDay>, Box<dyn Error>>;
