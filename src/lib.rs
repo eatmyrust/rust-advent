@@ -2,11 +2,11 @@ mod advent;
 use std::collections::HashMap;
 use std::error::Error;
 
-use advent::day1::NewDay1Puzzle;
-use advent::day2::NewDay2Puzzle;
-use advent::day3::NewDay3Puzzle;
-use advent::day4::NewDay4Puzzle;
-use advent::day5::NewDay5Puzzle;
+use advent::year_2022::day1::NewDay1Puzzle;
+use advent::year_2022::day2::NewDay2Puzzle;
+use advent::year_2022::day3::NewDay3Puzzle;
+use advent::year_2022::day4::NewDay4Puzzle;
+use advent::year_2022::day5::NewDay5Puzzle;
 use advent::Parse;
 
 pub struct CLIParams {
