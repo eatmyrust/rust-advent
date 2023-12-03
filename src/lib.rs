@@ -8,6 +8,7 @@ use advent::year_2022::day3::NewDay3Puzzle;
 use advent::year_2022::day4::NewDay4Puzzle;
 use advent::year_2022::day5::NewDay5Puzzle;
 use advent::year_2023::day1::NewDay1Puzzle as NewDay1Puzzle2023;
+use advent::year_2023::day2::NewDay2Puzzle as NewDay2Puzzle2023;
 use advent::Parse;
 
 pub struct CLIParams {
@@ -45,6 +46,7 @@ fn collect_puzzles() -> HashMap<&'static str, Box<dyn Parse>> {
     puzzle_days.insert("day4", Box::new(NewDay4Puzzle {}));
     puzzle_days.insert("day5", Box::new(NewDay5Puzzle {}));
     puzzle_days.insert("2023_day1", Box::new(NewDay1Puzzle2023 {}));
+    puzzle_days.insert("2023_day2", Box::new(NewDay2Puzzle2023 {}));
     puzzle_days
 }
 
