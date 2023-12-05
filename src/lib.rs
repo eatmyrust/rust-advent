@@ -2,15 +2,8 @@ mod advent;
 use std::collections::HashMap;
 use std::error::Error;
 
-use advent::year_2022::day1::NewDay1Puzzle;
-use advent::year_2022::day2::NewDay2Puzzle;
-use advent::year_2022::day3::NewDay3Puzzle;
-use advent::year_2022::day4::NewDay4Puzzle;
-use advent::year_2022::day5::NewDay5Puzzle;
-use advent::year_2023::day1::NewDay1Puzzle as NewDay1Puzzle2023;
-use advent::year_2023::day2::NewDay2Puzzle as NewDay2Puzzle2023;
-use advent::year_2023::day3::NewDay3Puzzle as NewDay3Puzzle2023;
-use advent::year_2023::day4::NewDay4Puzzle as NewDay4Puzzle2023;
+use advent::y2022;
+use advent::y2023;
 use advent::Parse;
 
 pub struct CLIParams {
@@ -50,15 +43,15 @@ fn collect_puzzles() -> HashMap<&'static str, HashMap<&'static str, Box<dyn Pars
     let mut puzzle_days_2022: HashMap<&'static str, Box<dyn Parse>> = HashMap::new();
     let mut puzzle_days_2023: HashMap<&'static str, Box<dyn Parse>> = HashMap::new();
 
-    puzzle_days_2022.insert("day1", Box::new(NewDay1Puzzle {}));
-    puzzle_days_2022.insert("day2", Box::new(NewDay2Puzzle {}));
-    puzzle_days_2022.insert("day3", Box::new(NewDay3Puzzle {}));
-    puzzle_days_2022.insert("day4", Box::new(NewDay4Puzzle {}));
-    puzzle_days_2022.insert("day5", Box::new(NewDay5Puzzle {}));
-    puzzle_days_2023.insert("day1", Box::new(NewDay1Puzzle2023 {}));
-    puzzle_days_2023.insert("day2", Box::new(NewDay2Puzzle2023 {}));
-    puzzle_days_2023.insert("day3", Box::new(NewDay3Puzzle2023 {}));
-    puzzle_days_2023.insert("day4", Box::new(NewDay4Puzzle2023 {}));
+    puzzle_days_2022.insert("day1", Box::new(y2022::NewDay1Puzzle {}));
+    puzzle_days_2022.insert("day2", Box::new(y2022::NewDay2Puzzle {}));
+    puzzle_days_2022.insert("day3", Box::new(y2022::NewDay3Puzzle {}));
+    puzzle_days_2022.insert("day4", Box::new(y2022::NewDay4Puzzle {}));
+    puzzle_days_2022.insert("day5", Box::new(y2022::NewDay5Puzzle {}));
+    puzzle_days_2023.insert("day1", Box::new(y2023::NewDay1Puzzle {}));
+    puzzle_days_2023.insert("day2", Box::new(y2023::NewDay2Puzzle {}));
+    puzzle_days_2023.insert("day3", Box::new(y2023::NewDay3Puzzle {}));
+    puzzle_days_2023.insert("day4", Box::new(y2023::NewDay4Puzzle {}));
 
     let puzzle_days = HashMap::from([("2022", puzzle_days_2022), ("2023", puzzle_days_2023)]);
     puzzle_days
