@@ -63,8 +63,8 @@ fn find_lowest_charge_time_to_beat_record_distance(
     record_distance: u64,
     allocated_time: u64,
 ) -> u64 {
-    for i in 0..allocated_time + 1 {
-        if i * (allocated_time - i) >= record_distance {
+    for i in 0..allocated_time {
+        if i * (allocated_time - i) > record_distance {
             return i;
         }
     }
@@ -75,9 +75,9 @@ fn find_highest_charge_time_to_beat_record_distance(
     record_distance: u64,
     allocated_time: u64,
 ) -> u64 {
-    let allocated_time_range = 0..allocated_time + 1;
+    let allocated_time_range = 0..allocated_time;
     for i in allocated_time_range.rev() {
-        if i * (allocated_time - i) >= record_distance {
+        if i * (allocated_time - i) > record_distance {
             return i;
         }
     }
@@ -107,6 +107,7 @@ fn calculate_margin_of_error(allocated_times: &Vec<u64>, distance_records: &Vec<
 mod tests {
     use super::*;
 
+    #[test]
     fn calculate_margin_of_error_1() {
         let expected = 288;
 
