@@ -8,3 +8,5 @@ mod day4;
 pub use day4::NewDay4Puzzle;
 mod day5;
 pub use day5::NewDay5Puzzle;
+mod day6;
+pub use day6::NewDay6Puzzle;
