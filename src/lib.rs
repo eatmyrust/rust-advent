@@ -54,6 +54,7 @@ fn collect_puzzles() -> HashMap<&'static str, HashMap<&'static str, Box<dyn Pars
     puzzle_days_2023.insert("day4", Box::new(y2023::NewDay4Puzzle {}));
     puzzle_days_2023.insert("day5", Box::new(y2023::NewDay5Puzzle {}));
     puzzle_days_2023.insert("day6", Box::new(y2023::NewDay6Puzzle {}));
+    puzzle_days_2023.insert("day7", Box::new(y2023::NewDay7Puzzle {}));
 
     let puzzle_days = HashMap::from([("2022", puzzle_days_2022), ("2023", puzzle_days_2023)]);
     puzzle_days

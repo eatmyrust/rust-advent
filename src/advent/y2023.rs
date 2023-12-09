@@ -10,3 +10,5 @@ mod day5;
 pub use day5::NewDay5Puzzle;
 mod day6;
 pub use day6::NewDay6Puzzle;
+mod day7;
+pub use day7::NewDay7Puzzle;
